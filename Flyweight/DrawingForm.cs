@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace Flyweight
 {
     public partial class DrawingForm : Form
@@ -8,7 +10,8 @@ namespace Flyweight
         private static readonly Color[] colors = { Color.Red, Color.Green, Color.Orange };
         private readonly List<IShape> shapeList = new List<IShape>();
         private readonly Random rand = new Random();
-        public static DrawingForm Instance { get; private set; }
+        private bool stopRequested = false;
+        public static DrawingForm Instance;
 
         public DrawingForm()
         {
@@ -26,16 +29,29 @@ namespace Flyweight
             textBoxOutput.AppendText(message);
         }
 
-        private void BtnStart_Click(object sender, EventArgs e)
+        private async void BtnStart_Click(object sender, EventArgs e)
         {
-            Graphics g = CreateGraphics();
+            stopRequested = false;
+
+            Graphics g = pictrBox.CreateGraphics();
 
             for (int i = 0; i < 20; ++i)
             {
+                if (stopRequested)
+                    break;
+
                 IShape shape = ShapeFactory.GetShape(GetRandomShape());
                 shapeList.Add(shape);
-                shape.Draw(g, GetRandomX(), GetRandomY(), GetRandomWidth(), GetRandomHeight(), GetRandomColor(), textBoxOutput);
+                shape.Draw(g, GetRandomX(), GetRandomY(), GetRandomWidth(), GetRandomHeight(), GetRandomColor(), textBoxOutput, shape);
+                await Task.Delay(100);
             }
+            shapeList.Clear();
+            ClearMessage();
+        }
+
+        private void BtnStop_Click(object sender, EventArgs e)
+        {
+            stopRequested = true;
         }
 
         private ShapeType GetRandomShape()
@@ -66,16 +82,6 @@ namespace Flyweight
         private Color GetRandomColor()
         {
             return colors[rand.Next(0, colors.Length)];
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-
-            foreach (IShape shape in shapeList)
-            {
-                shape.Draw(e.Graphics, GetRandomX(), GetRandomY(), GetRandomWidth(), GetRandomHeight(), GetRandomColor(), textBoxOutput);
-            }
         }
     }
 }

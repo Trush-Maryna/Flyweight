@@ -30,14 +30,17 @@
         {
             BtnStart = new Button();
             textBoxOutput = new TextBox();
+            BtnStop = new Button();
+            pictrBox = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictrBox).BeginInit();
             SuspendLayout();
             // 
             // BtnStart
             // 
+            BtnStart.AllowDrop = true;
             BtnStart.BackColor = SystemColors.GradientActiveCaption;
-            BtnStart.Dock = DockStyle.Bottom;
             BtnStart.Font = new Font("Unispace", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtnStart.Location = new Point(0, 416);
+            BtnStart.Location = new Point(0, 385);
             BtnStart.Name = "BtnStart";
             BtnStart.Size = new Size(800, 34);
             BtnStart.TabIndex = 0;
@@ -47,24 +50,48 @@
             // 
             // textBoxOutput
             // 
-            textBoxOutput.Dock = DockStyle.Bottom;
             textBoxOutput.Enabled = false;
-            textBoxOutput.Location = new Point(0, 381);
+            textBoxOutput.Location = new Point(0, 347);
             textBoxOutput.Multiline = true;
             textBoxOutput.Name = "textBoxOutput";
-            textBoxOutput.Size = new Size(800, 35);
+            textBoxOutput.Size = new Size(800, 40);
             textBoxOutput.TabIndex = 1;
             textBoxOutput.TextAlign = HorizontalAlignment.Center;
+            // 
+            // BtnStop
+            // 
+            BtnStop.BackColor = Color.RosyBrown;
+            BtnStop.Dock = DockStyle.Bottom;
+            BtnStop.Font = new Font("Unispace", 10F);
+            BtnStop.Location = new Point(0, 416);
+            BtnStop.Name = "BtnStop";
+            BtnStop.Size = new Size(800, 34);
+            BtnStop.TabIndex = 2;
+            BtnStop.Text = "Stop";
+            BtnStop.UseVisualStyleBackColor = false;
+            BtnStop.Click += BtnStop_Click;
+            // 
+            // pictrBox
+            // 
+            pictrBox.Dock = DockStyle.Top;
+            pictrBox.Location = new Point(0, 0);
+            pictrBox.Name = "pictrBox";
+            pictrBox.Size = new Size(800, 348);
+            pictrBox.TabIndex = 3;
+            pictrBox.TabStop = false;
             // 
             // DrawingForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(pictrBox);
+            Controls.Add(BtnStop);
             Controls.Add(textBoxOutput);
             Controls.Add(BtnStart);
             Name = "DrawingForm";
             Text = "DrawingForm";
+            ((System.ComponentModel.ISupportInitialize)pictrBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -73,5 +100,7 @@
 
         private Button BtnStart;
         private TextBox textBoxOutput;
+        private Button BtnStop;
+        private PictureBox pictrBox;
     }
 }
