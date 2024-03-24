@@ -14,9 +14,41 @@
 ### Діаграми класів та стану
 
 ##### Class Diagram Flyweight:
-![Class](FlyweightClass.png)
+---
+title: Flyweight
+---
+classDiagram
+    Client *-- ConcreteFlyweight
+    class ConcreteFlyweight{
+        - uniqueState
+        - flyweight
+        + ConcreteFlyweight(repeatingState, uniqueState)
+        + someOperation()
+    }
+    note for ConcreteFlyweight "this.uniqueState = uniqueState \n this.flyweight = factory.getFlyweight(repeatingState)"
+    note for ConcreteFlyweight "flyweight.someOperation(uniqueState)"
+    IFlyweight <|.. ConcreteFlyweight
+    FlyweightFactory <|-- ConcreteFlyweight
+    FlyweightFactory *-- IFlyweight: -cache
+    note for FlyweightFactory "if(cache[repeatingState] == null) { \n cache[repeatingState] = new IFlyweight(repeatingState) \n } \n return cache[repeatingState]"
+    class IFlyweight{
+      <<interface>>
+      - repeatingState
+      + someOperation(uniqueState)
+    }
+    class FlyweightFactory{
+      - cache:IFlyweight[]
+      + getFlyweight(repeatingState)
+    }
 ##### State Diagram Flyweight:
-![State](FlyweightState.png)
+---
+title: Flyweight
+---
+stateDiagram
+    [*] --> Off
+    Off --> Drawing: Start
+    Drawing --> Drawing: drawTimer_Tick()
+    Drawing --> Off: Stop or stopRequested
 
 ### Опис основних структурних елементів :
 - **FlyweightFactory** керує створенням і повторним використанням flyweight. Фабрика отримує запити, в яких зазначено бажаний стан. Якщо flyweight з таким станом вже створено, фабрика відразу його повертає, а якщо ні — створює новий об’єкт;
