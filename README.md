@@ -14,6 +14,7 @@
 ### Діаграми класів та стану
 
 ##### Class Diagram Flyweight:
+```mermaid
 ---
 title: Flyweight
 ---
@@ -40,7 +41,9 @@ classDiagram
       - cache:IFlyweight[]
       + getFlyweight(repeatingState)
     }
+```
 ##### State Diagram Flyweight:
+```mermaid
 ---
 title: Flyweight
 ---
@@ -49,7 +52,7 @@ stateDiagram
     Off --> Drawing: Start
     Drawing --> Drawing: drawTimer_Tick()
     Drawing --> Off: Stop or stopRequested
-
+```
 ### Опис основних структурних елементів :
 - **FlyweightFactory** керує створенням і повторним використанням flyweight. Фабрика отримує запити, в яких зазначено бажаний стан. Якщо flyweight з таким станом вже створено, фабрика відразу його повертає, а якщо ні — створює новий об’єкт;
 - **IFlyweight** інтерфейс, що містить ***внутрішній стан***, який повторювався в багатьох первинних об’єктах;
