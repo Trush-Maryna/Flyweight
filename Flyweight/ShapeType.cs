@@ -2,6 +2,8 @@
 {
     public enum ShapeType
     {
-        OVAL_FILL, OVAL_NOFILL, LINE
+        OVAL_FILL, 
+        OVAL_NOFILL, 
+        LINE
     }
 }

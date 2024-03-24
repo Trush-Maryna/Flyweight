@@ -2,20 +2,19 @@
 {
     public static class ShapeFactory
     {
-        private static readonly Dictionary<ShapeType, IShape> shapes = new Dictionary<ShapeType, IShape>();
-
-        public static IShape GetShape(ShapeType type)
+        public static IShape GetShape(ShapeType type, Color color, int x, int y, int width, int height)
         {
-            if (!shapes.ContainsKey(type))
+            switch (type)
             {
-                if (type == ShapeType.OVAL_FILL)
-                    shapes.Add(type, new Oval(true));
-                else if (type == ShapeType.OVAL_NOFILL)
-                    shapes.Add(type, new Oval(false));
-                else if (type == ShapeType.LINE)
-                    shapes.Add(type, new Line());
+                case ShapeType.LINE:
+                    return new Line(x, y, x + width, y + height, color);
+                case ShapeType.OVAL_FILL:
+                    return new Oval(x, y, width, height, color, true);
+                case ShapeType.OVAL_NOFILL:
+                    return new Oval(x, y, width, height, color, false);
+                default:
+                    throw new ArgumentException("Invalid shape type");
             }
-            return shapes[type];
         }
     }
 }

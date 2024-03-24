@@ -1,5 +1,3 @@
-using System.Windows.Forms;
-
 namespace Flyweight
 {
     public partial class DrawingForm : Form
@@ -8,15 +6,17 @@ namespace Flyweight
         private readonly int HEIGHT = 395;
         private static readonly ShapeType[] shapes = { ShapeType.LINE, ShapeType.OVAL_FILL, ShapeType.OVAL_NOFILL };
         private static readonly Color[] colors = { Color.Red, Color.Green, Color.Orange };
-        private readonly List<IShape> shapeList = new List<IShape>();
         private readonly Random rand = new Random();
         private bool stopRequested = false;
-        public static DrawingForm Instance;
+        private bool isDrawing = false;
+        private List<IShape> shapeList = new List<IShape>();
+        public static DrawingForm? Instance;
 
         public DrawingForm()
         {
             InitializeComponent();
             Instance = this;
+            drawTimer.Interval = 2000;
         }
 
         public void ClearMessage()
@@ -29,24 +29,15 @@ namespace Flyweight
             textBoxOutput.AppendText(message);
         }
 
-        private async void BtnStart_Click(object sender, EventArgs e)
+        private void BtnStart_Click(object sender, EventArgs e)
         {
-            stopRequested = false;
-
-            Graphics g = pictrBox.CreateGraphics();
-
-            for (int i = 0; i < 20; ++i)
+            if (!isDrawing)
             {
-                if (stopRequested)
-                    break;
-
-                IShape shape = ShapeFactory.GetShape(GetRandomShape());
-                shapeList.Add(shape);
-                shape.Draw(g, GetRandomX(), GetRandomY(), GetRandomWidth(), GetRandomHeight(), GetRandomColor(), textBoxOutput, shape);
-                await Task.Delay(100);
+                stopRequested = false;
+                shapeList.Clear();
+                isDrawing = true;
+                drawTimer.Start();
             }
-            shapeList.Clear();
-            ClearMessage();
         }
 
         private void BtnStop_Click(object sender, EventArgs e)
@@ -57,6 +48,37 @@ namespace Flyweight
         private ShapeType GetRandomShape()
         {
             return shapes[rand.Next(0, shapes.Length)];
+        }
+
+        private Color GetRandomColor()
+        {
+            return colors[rand.Next(0, colors.Length)];
+        }
+
+        private void pictrBox_Paint(object sender, PaintEventArgs e)
+        {
+            if (stopRequested || shapeList.Count >= 20)
+            {
+                ClearMessage();
+                isDrawing = false;
+                return;
+            }
+
+            Graphics g = e.Graphics;
+            foreach (IShape shape in shapeList)
+            {
+                shape.Draw(g);
+            }
+        }
+
+        private void drawTimer_Tick(object sender, EventArgs e)
+        {
+            if (!stopRequested && shapeList.Count < 20)
+            {
+                IShape shape = ShapeFactory.GetShape(GetRandomShape(), GetRandomColor(), GetRandomX(), GetRandomY(), GetRandomWidth(), GetRandomHeight());
+                shapeList.Add(shape);
+                pictrBox.Invalidate();
+            }
         }
 
         private int GetRandomX()
@@ -77,11 +99,6 @@ namespace Flyweight
         private int GetRandomHeight()
         {
             return rand.Next(0, HEIGHT / 10);
-        }
-
-        private Color GetRandomColor()
-        {
-            return colors[rand.Next(0, colors.Length)];
         }
     }
 }
