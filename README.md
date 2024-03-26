@@ -52,6 +52,7 @@ stateDiagram
     Off --> Drawing: Start
     Drawing --> Drawing: drawTimer_Tick()
     Drawing --> Off: Stop or stopRequested
+    Off --> [*]
 ```
 ### Опис основних структурних елементів :
 - **FlyweightFactory** керує створенням і повторним використанням flyweight. Фабрика отримує запити, в яких зазначено бажаний стан. Якщо flyweight з таким станом вже створено, фабрика відразу його повертає, а якщо ні — створює новий об’єкт;
