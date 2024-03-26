@@ -50,8 +50,9 @@ title: Flyweight
 stateDiagram
     [*] --> Off
     Off --> Drawing: Start
-    Drawing --> Drawing: drawTimer_Tick()
-    Drawing --> Off: Stop or stopRequested
+    Drawing --> Drawing: Timer_Tick
+    Drawing --> Off: Stop
+    Drawing --> Off: StopRequested
     Off --> [*]
 ```
 ### Опис основних структурних елементів :
